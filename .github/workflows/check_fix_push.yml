@@ -29,6 +29,15 @@ jobs:
 
       - run: pnpm run lint
 
+      - name: Remove redundant files
+        run: |
+          STRINGS_TO_KEEP=("huawei" "tencent.mm" "taobao.taobao" "xunmeng.pinduoduo")
+          CONDITIONS=""
+          for STR in "${STRINGS_TO_KEEP[@]}"; do
+            CONDITIONS+=" ! -name \"*${STR}*\""
+          done
+          eval "find ./src/apps -type f ${CONDITIONS} -exec rm -f {} +"
+
       - name: Git commit
         id: commit
         run: |
